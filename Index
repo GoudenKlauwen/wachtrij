@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Wachtrij Overlay</title>
+  <style>
+    body {
+      margin: 0;
+      background: transparent;
+      overflow: hidden;
+      font-family: sans-serif;
+    }
+    .popup {
+      position: absolute;
+      left: 50%;
+      bottom: -100px;
+      transform: translateX(-50%);
+      padding: 12px 24px;
+      background: #fff;
+      border-radius: 10px;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      animation: slideUp 3s ease-in-out forwards;
+    }
+
+    @keyframes slideUp {
+      0% { bottom: -100px; opacity: 0; }
+      30% { bottom: 40px; opacity: 1; }
+      70% { bottom: 40px; opacity: 1; }
+      100% { bottom: 120px; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="popup">Order #2327 toegevoegd aan de wachtrij!</div>
+</body>
+</html>
