@@ -13,25 +13,65 @@
     .popup {
       position: absolute;
       left: 50%;
-      bottom: -100px;
+      bottom: -150px;
       transform: translateX(-50%);
       padding: 12px 24px;
       background: #fff;
       border-radius: 10px;
       font-size: 20px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      animation: slideUp 3s ease-in-out forwards;
+      animation: slideUp 5s ease-in-out forwards;
     }
-
     @keyframes slideUp {
-      0% { bottom: -100px; opacity: 0; }
-      30% { bottom: 40px; opacity: 1; }
-      70% { bottom: 40px; opacity: 1; }
+      0%   { bottom: -100px; opacity: 0; }
+      20%  { bottom: 40px; opacity: 1; }
+      80%  { bottom: 40px; opacity: 1; }
       100% { bottom: 120px; opacity: 0; }
     }
   </style>
 </head>
 <body>
-  <div class="popup">Order #2327 toegevoegd aan de wachtrij!</div>
+  <div id="container"></div>
+
+  <script>
+    const apiKey = 'AIzaSyAmtrvi-8ltOefShbv6aED55fjJHZm9tLc'; // <-- Vul hier jouw API key in
+    const sheetId = '1_orWIpGUTduNVM_speit-VHVOK2iqTzdGHzDUEBnM8k'; // <-- Vul hier jouw Google Sheet ID in
+    const sheetName = 'Blad1'; // Tabbladnaam in Google Sheets
+    const range = 'A2:A'; // Kolom met ordernummers
+
+    async function fetchOrders() {
+      const url = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/values/${sheetName}!${range}?key=${apiKey}`;
+      const response = await fetch(url);
+      const data = await response.json();
+      return data.values || [];
+    }
+
+    let lastOrder = null;
+
+    async function showNextOrder() {
+      const orders = await fetchOrders();
+      if (orders.length === 0) return;
+
+      const newOrder = orders[0][0];
+      if (newOrder === lastOrder) return; // voorkom dubbele pop-ups
+      lastOrder = newOrder;
+
+      const container = document.getElementById('container');
+      const popup = document.createElement('div');
+      popup.className = 'popup';
+      popup.innerText = `Order #${newOrder} toegevoegd aan de wachtrij`;
+
+      container.appendChild(popup);
+
+      setTimeout(() => {
+        popup.remove();
+      }, 5000);
+    }
+
+    // Start direct en herhaal elke 10 seconden
+    showNextOrder();
+    setInterval(showNextOrder, 10000);
+  </script>
 </body>
 </html>
+
